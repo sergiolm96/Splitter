@@ -2,25 +2,37 @@
 <html lang="es">
 <head>
     <meta charset="utf-8">
-    <title>Splitwise App</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>SPLITTER</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-    <h1>Distribución de Gastos</h1>
-    <form action="{{ url_for('main.add_expense') }}" method="post">
-        <label for="member">Miembro:</label>
-        <input type="text" id="member" name="member" required>
-        <br>
-        <label for="amount">Monto:</label>
-        <input type="number" step="0.01" id="amount" name="amount" required>
-        <br>
-        <label for="description">Descripción:</label>
-        <input type="text" id="description" name="description">
-        <br>
-        <input type="submit" value="Añadir Gasto">
-    </form>
-    <a href="{{ url_for('main.create_group') }}">Crear Grupo</a>
-    <a href="{{ url_for('main.login') }}">Iniciar sesión</a>
-    <a href="{{ url_for('main.register') }}">Registrar</a>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="{{ url_for('main.index') }}">Inicio</a></li>
+                <li><a href="{{ url_for('main.create_group') }}">Crear Grupo</a></li>
+                <li><a href="{{ url_for('main.add_expense') }}">Añadir Gasto</a></li>
+                <li><a href="{{ url_for('main.login') }}">Iniciar sesión</a></li>
+                <li><a href="{{ url_for('main.register') }}">Registrar</a></li>
+                <li><a href="{{ url_for('main.transactions') }}">Ver Transacciones</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <h1>SPLITTER</h1>
+        <form action="{{ url_for('main.add_expense') }}" method="post">
+            <label for="member">Miembro:</label>
+            <input type="text" id="member" name="member" required>
+            <br>
+            <label for="amount">Monto:</label>
+            <input type="number" step="0.01" id="amount" name="amount" required>
+            <br>
+            <label for="description">Descripción:</label>
+            <input type="text" id="description" name="description">
+            <br>
+            <input type="submit" value="Añadir Gasto">
+        </form>
+    </main>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>

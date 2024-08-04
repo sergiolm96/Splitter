@@ -1,0 +1,175 @@
+/* Definir variables de color */
+:root {
+    /* Paleta de colores */
+    --hookers-green: #397367ff;
+    --robin-egg-blue: #63cccaff;
+    --keppel: #5da399ff;
+    --dark-cyan: #42858cff;
+    --onyx: #35393cff;
+
+    /* Modo oscuro */
+    --background-color: var(--onyx);
+    --header-background: var(--dark-cyan);
+    --text-color: #e0e0e0;
+    --input-background: #444;
+    --input-border: #555;
+    --input-text-color: #e0e0e0;
+    --button-background: var(--hookers-green);
+    --button-hover: var(--keppel);
+    --table-header-background: var(--dark-cyan);
+    --table-header-text: #e0e0e0;
+    --table-row-even: #444;
+    --table-row-odd: #35393c;
+}
+
+/* Estilos generales */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+}
+
+/* Estilos del header */
+header {
+    width: 100%;
+    background-color: var(--header-background);
+    padding: 10px 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+}
+
+nav li {
+    margin: 0 15px;
+}
+
+nav a {
+    color: var(--text-color);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+/* Estilos del main */
+main {
+    width: 90%;
+    max-width: 600px;
+    background: var(--background-color);
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+h1 {
+    color: var(--header-background);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+/* Formularios */
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="password"] {
+    padding: 10px;
+    background-color: var(--input-background);
+    border: 1px solid var(--input-border);
+    border-radius: 4px;
+    margin-bottom: 15px;
+    font-size: 16px;
+    color: var(--input-text-color);
+}
+
+input[type="submit"] {
+    background-color: var(--button-background);
+    color: var(--text-color);
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+input[type="submit"]:hover {
+    background-color: var(--button-hover);
+}
+
+/* Tabla */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid var(--input-border);
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: var(--table-header-background);
+    color: var(--table-header-text);
+}
+
+td {
+    background-color: var(--table-row-even);
+    color: var(--text-color);
+}
+
+tr:nth-child(odd) td {
+    background-color: var(--table-row-odd);
+}
+
+/* Links */
+a {
+    color: var(--button-background);
+    text-decoration: none;
+    font-weight: bold;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Media Queries */
+@media (max-width: 600px) {
+    main {
+        width: 100%;
+        padding: 10px;
+    }
+
+    nav ul {
+        flex-direction: column;
+    }
+
+    nav li {
+        margin: 5px 0;
+    }
+}

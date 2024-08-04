@@ -4,6 +4,10 @@ from .models import get_db_connection
 
 bp = Blueprint('main', __name__)
 
+@bp.route('/')
+def index():
+    return render_template('index.html')
+
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
@@ -31,21 +35,25 @@ def register():
         return redirect(url_for('main.login'))
     return render_template('register.html')
 
-@bp.route('/create_group', methods=['POST'])
+@bp.route('/create_group', methods=['GET', 'POST'])
 def create_group():
-    group_name = request.form['group_name']
-    members = request.form['members'].split(',')
-    conn = get_db_connection()
-    cur = conn.cursor()
-    cur.execute('INSERT INTO groups (name) VALUES (?)', (group_name,))
-    group_id = cur.lastrowid
-    for member in members:
-        cur.execute('INSERT INTO group_members (group_id, member) VALUES (?, ?)', (group_id, member.strip()))
-    conn.commit()
-    conn.close()
+    try:
+        group_name = request.form['group_name']
+        members = request.form['members'].split(',')
+        conn = get_db_connection()
+        cur = conn.cursor()
+        cur.execute('INSERT INTO groups (name) VALUES (?)', (group_name,))
+        group_id = cur.lastrowid
+        for member in members:
+            cur.execute('INSERT INTO group_members (group_id, member) VALUES (?, ?)', (group_id, member.strip()))
+        conn.commit()
+        conn.close()
+    except KeyError as e:
+        return f"KeyError: {e}", 400  # Return a meaningful error message
     return redirect(url_for('main.index'))
 
-@bp.route('/add_group_expense', methods=['POST'])
+
+@bp.route('/add_group_expense', methods=['GET', 'POST'])
 def add_group_expense():
     group_id = request.form['group_id']
     members = request.form['members'].split(',')
@@ -59,14 +67,25 @@ def add_group_expense():
     conn.close()
     return redirect(url_for('main.index'))
 
-@bp.route('/add_expense', methods=['POST'])
+@bp.route('/transactions', methods=['GET', 'POST'])
+def transactions():
+    # Lógica para obtener y mostrar las transacciones
+    return render_template('transactions.html')
+
+
+@bp.route('/add_expense', methods=['GET', 'POST'])
 def add_expense():
-    member = request.form['member']
-    amount = float(request.form['amount'])
-    description = request.form['description']
-    conn = get_db_connection()
-    conn.execute('INSERT INTO expenses (member, amount, description) VALUES (?, ?, ?)', 
-                 (member, amount, description))
-    conn.commit()
-    conn.close()
+    try:
+        member = request.form['member']
+        amount = float(request.form['amount'])
+        description = request.form['description']
+        conn = get_db_connection()
+        conn.execute('INSERT INTO expenses (member, amount, description) VALUES (?, ?, ?)', 
+                     (member, amount, description))
+        conn.commit()
+        conn.close()
+    except KeyError as e:
+        return f"KeyError: {e}", 400  # Return a meaningful error message
     return redirect(url_for('main.index'))
+
+
