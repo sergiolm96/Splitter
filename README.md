@@ -8,8 +8,10 @@ Características Planeadas
     Añadir amigos: Los usuarios podrán añadir amigos a sus grupos.
     Gestión de deudas y pagos internos: Los grupos podrán gestionar deudas y pagos internos de manera eficiente.
 
-Uso
-Añadir Gastos
+
+## Uso
+
+### Añadir Gastos
 
     En la página principal, introduce el nombre del miembro, el monto del gasto y una descripción.
     Haz clic en "Añadir Gasto".
