@@ -1,0 +1,55 @@
+# Python
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+*.db
+*.sqlite3
+*.env
+
+# Virtual Environment
+venv/
+env/
+ENV/
+*.egg-info/
+
+# IDE/Editor Configurations
+.vscode/
+.idea/
+*.suo
+*.ntvs_analysis.dat
+*.ncb
+*.swp
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+*.log.*
+
+# Coverage Reports
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+*.dat
+*.csv
+*.xls
+*.xlsx
+
+# Build and Distribution
+build/
+dist/
+*.egg
+*.egg-info/
+
+# Migrations
+migrations/
+
+# Flask specific
+instance/

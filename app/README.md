@@ -1,4 +1,4 @@
-git push .# Splitter
+# Splitter
 
 Splitter es una aplicación web en desarrollo para la distribución y gestión de gastos entre varios miembros. Proporciona funcionalidades similares a Tricount o Splitwise, permitiendo almacenar deudas y pagos, y optimizando el número de transacciones necesarias para equilibrar los gastos.
 
