@@ -1,10 +1,18 @@
 import sqlite3
+import os
+
+def get_db_path():
+    # Obtiene el directorio de la aplicación y crea la ruta completa a la base de datos
+    app_dir = os.path.dirname(os.path.abspath(__file__))
+    return os.path.join(app_dir, 'splitter.db')
 
 def init_db():
-    conn = sqlite3.connect('app/splitter.db')  # Ruta a la base de datos
+    db_path = get_db_path()
+    print(f"Conectando a la base de datos en {db_path}...")
+    conn = sqlite3.connect(db_path)
     c = conn.cursor()
 
-    # Crear tablas de base de datos
+    print("Creando tablas...")
     c.execute('''CREATE TABLE IF NOT EXISTS users (
                  id INTEGER PRIMARY KEY AUTOINCREMENT,
                  username TEXT UNIQUE,
@@ -30,3 +38,7 @@ def init_db():
 
     conn.commit()
     conn.close()
+    print("Base de datos inicializada correctamente.")
+
+if __name__ == '__main__':
+    init_db()

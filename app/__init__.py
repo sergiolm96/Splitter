@@ -1,10 +1,16 @@
 from flask import Flask
+from .init_db import init_db
+from .routes import bp as main_bp
 
 def create_app():
     app = Flask(__name__)
-    app.config.from_object('config.Config')  # Asegúrate de tener un archivo config.py si usas esta línea.
+    app.secret_key = 'admin'
 
-    from .routes import bp as routes_bp
-    app.register_blueprint(routes_bp)
+    # Registrar blueprint
+    app.register_blueprint(main_bp)
+
+    # Inicializar la base de datos
+    with app.app_context():
+        init_db()
 
     return app
