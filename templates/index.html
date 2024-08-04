@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <title>Splitwise App</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Distribución de Gastos</h1>
+    <form action="{{ url_for('add_expense') }}" method="post">
+        <label for="member">Miembro:</label>
+        <input type="text" id="member" name="member" required>
+        <br>
+        <label for="amount">Monto:</label>
+        <input type="number" step="0.01" id="amount" name="amount" required>
+        <br>
+        <label for="description">Descripción:</label>
+        <input type="text" id="description" name="description">
+        <br>
+        <input type="submit" value="Añadir Gasto">
+    </form>
+    <a href="{{ url_for('transactions') }}">Ver Transacciones</a>
+</body>
+</html>
