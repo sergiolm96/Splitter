@@ -13,32 +13,48 @@ def init_db():
     c = conn.cursor()
 
     print("Creando tablas...")
+
+    # Tabla de usuarios
     c.execute('''CREATE TABLE IF NOT EXISTS users (
                  id INTEGER PRIMARY KEY AUTOINCREMENT,
                  username TEXT UNIQUE,
+                 email TEXT UNIQUE,
                  password TEXT)''')
 
+    # Tabla de grupos
     c.execute('''CREATE TABLE IF NOT EXISTS groups (
                  id INTEGER PRIMARY KEY AUTOINCREMENT,
-                 name TEXT UNIQUE)''')
+                 name TEXT UNIQUE,
+                 creator_id INTEGER,
+                 FOREIGN KEY (creator_id) REFERENCES users (id))''')
 
+    # Tabla de miembros del grupo
     c.execute('''CREATE TABLE IF NOT EXISTS group_members (
                  id INTEGER PRIMARY KEY AUTOINCREMENT,
                  group_id INTEGER,
-                 member TEXT,
-                 FOREIGN KEY (group_id) REFERENCES groups (id))''')
+                 user_id INTEGER,
+                 is_admin BOOLEAN DEFAULT FALSE,
+                 FOREIGN KEY (group_id) REFERENCES groups (id),
+                 FOREIGN KEY (user_id) REFERENCES users (id))''')
 
-    c.execute('''CREATE TABLE IF NOT EXISTS expenses (
+    # Tabla de gastos en grupo
+    c.execute('''CREATE TABLE IF NOT EXISTS group_expenses (
                  id INTEGER PRIMARY KEY AUTOINCREMENT,
                  group_id INTEGER,
-                 member TEXT,
+                 user_id INTEGER,
                  amount REAL,
                  description TEXT,
-                 FOREIGN KEY (group_id) REFERENCES groups (id))''')
+                 FOREIGN KEY (group_id) REFERENCES groups (id),
+                 FOREIGN KEY (user_id) REFERENCES users (id))''')
+
+    # Tabla de transacciones individuales
+    c.execute('''CREATE TABLE IF NOT EXISTS transactions (
+                 id INTEGER PRIMARY KEY AUTOINCREMENT,
+                 user_id INTEGER,
+                 amount REAL,
+                 description TEXT,
+                 FOREIGN KEY (user_id) REFERENCES users (id))''')
 
     conn.commit()
     conn.close()
     print("Base de datos inicializada correctamente.")
-
-if __name__ == '__main__':
-    init_db()

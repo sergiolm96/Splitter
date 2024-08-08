@@ -3,56 +3,185 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SPLITTER</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <title>SPLITTER - App de división de pagos y gastos</title>
+    <meta name="description" content="Una aplicación para dividir gastos y minimizar las transacciones necesarias para liquidar las deudas que tengas con tus amigos.">
+    <meta property="og:title" content="SPLITTER - App de división de pagos y gastos">
+    <meta property="og:description" content="Una aplicación para dividir gastos y minimizar las transacciones necesarias para liquidar las deudas que tengas con tus amigos.">
+    <meta property="og:image" content="/static/images/Splitter_Logo.webp">
+    <meta property="og:image:alt" content="Logo de la aplicacion Splitter, representa una hucha y el eslogan de la aplicación">
+    <link rel="stylesheet" href="/static/style.css">
 </head>
-<body data-logged-in="{{ logged_in|tojson }}">
+
+<body data-logged-in="false"> <!-- Cambia 'false' a 'true' cuando el usuario esté autenticado -->
     <header>
         <nav>
             <ul id="nav-links">
-                <li id="create-group" class="nav-item"><a href="{{ url_for('main.create_group') }}">Crear Grupo</a></li>
-                <li id="add-expense" class="nav-item"><a href="{{ url_for('main.add_expense') }}">Añadir Gasto</a></li>
-                <li id="transactions" class="nav-item"><a href="{{ url_for('main.transactions') }}">Ver Transacciones</a></li>
-                <li id="login" class="auth-link"><a href="{{ url_for('main.login') }}">Iniciar sesión</a></li>
-                <li id="register" class="auth-link"><a href="{{ url_for('main.register') }}">Registrar</a></li>
-                <li id="logout" class="auth-link" style="display: none;"><a href="{{ url_for('main.logout') }}">Cerrar sesión</a></li>
+                <!-- Secciones visibles para usuarios no autenticados -->
+
+                <li class="nav-item guest-only">
+                    <button id="login-btn">Iniciar sesión</button>
+                </li>
+                <li class="nav-item guest-only">
+                    <button id="register-btn">Registrar</button>
+                </li>
+                <!-- Secciones visibles para usuarios autenticados -->
+
+                <li class="nav-item auth-required" id="create-group-nav">
+                    <button id="create-group-btn">Crear Grupo</button>
+                </li>
+                <li class="nav-item auth-required" id="add-expense-nav">
+                    <button id="add-expense-btn">Añadir Gasto</button>
+                </li>
+                <li class="nav-item auth-required" id="transactions-nav">
+                    <button id="transactions-btn">Ver Transacciones</button>
+                </li>
+                <li class="nav-item auth-required" id="account-nav">
+                    <button id="account-btn">Manejar Cuenta</button>
+                </li>
+                <li class="auth-link auth-required" id="logout-nav">
+                    <a href="#" id="logout-btn">Cerrar sesión</a>
+                </li>
             </ul>
         </nav>
     </header>
-    <main id="welcome-screen">
-        <h1>SPLITTER</h1>
-        <div class="button-group">
-            <a href="{{ url_for('main.login') }}" class="btn btn-primary">Iniciar sesión</a>
-            <a href="{{ url_for('main.register') }}" class="btn btn-secondary">Registrar</a>
-        </div>
-    </main>
-    <main id="app-screen" style="display: none;">
-        <form action="{{ url_for('main.add_expense') }}" method="post">
-            <div class="form-group">
-                <label for="member">Miembro:</label>
-                <input type="text" id="member" name="member" required>
-            </div>
-            <div class="form-group">
-                <label for="amount">Monto:</label>
-                <input type="number" id="amount" name="amount" step="0.01" min="0" required>
-            </div>
-            <div class="form-group">
-                <label for="description">Descripción:</label>
-                <input type="text" id="description" name="description">
-            </div>
-            <button type="submit" class="btn-submit">Añadir Gasto</button>
-        </form>
-    </main>
+
+    <!-- Login Modal -->
+
+    <dialog id="login-modal" class="modal">
+        <article class="modal-content">
+            <button class="close-btn" id="login-close" aria-label="Cerrar">&times;</button>
+            <h2>Iniciar sesión</h2>
+            <form id="login-form">
+                <section class="form-group">
+                    <label for="login-identifier">Correo electrónico o Nombre de usuario:</label>
+                    <input type="text" id="login-identifier" name="identifier" required>
+                </section>
+                <section class="form-group">
+                    <label for="login-password">Contraseña:</label>
+                    <input type="password" id="login-password" name="password" required>
+                </section>
+                <button type="submit">Iniciar sesión</button>
+            </form>
+        </article>
+    </dialog>
+
+    <!-- Register Modal -->
+
+    <dialog id="register-modal" class="modal">
+        <article class="modal-content">
+            <button class="close-btn" id="register-close" aria-label="Cerrar">&times;</button>
+            <h2>Registrarse</h2>
+            <form id="register-form">
+                <section class="form-group">
+                    <label for="register-username">Nombre de usuario:</label>
+                    <input type="text" id="register-username" name="username" required>
+                </section>
+                <section class="form-group">
+                    <label for="register-email">Correo electrónico:</label>
+                    <input type="email" id="register-email" name="email" required>
+                </section>
+                <section class="form-group">
+                    <label for="register-password">Contraseña:</label>
+                    <input type="password" id="register-password" name="password" required>
+                </section>
+                <section class="form-group">
+                    <label for="register-confirm-password">Confirmar contraseña:</label>
+                    <input type="password" id="register-confirm-password" name="confirm-password" required>
+                </section>
+                <button type="submit">Registrarse</button>
+            </form>
+        </article>
+    </dialog>
+
+    <!-- Create Group Modal -->
+
+    <dialog id="create-group-modal" class="modal">
+        <article class="modal-content">
+            <button class="close-btn" id="create-group-close" aria-label="Cerrar">&times;</button>
+            <h2>Crear Grupo</h2>
+            <form id="create-group-form">
+                <section class="form-group">
+                    <label for="group-name">Nombre del Grupo:</label>
+                    <input type="text" id="group-name" name="group-name" required>
+                </section>
+                <button type="submit">Crear Grupo</button>
+            </form>
+        </article>
+    </dialog>
+
+    <!-- Add Expense Modal -->
+
+    <dialog id="add-expense-modal" class="modal">
+        <article class="modal-content">
+            <button class="close-btn" id="add-expense-close" aria-label="Cerrar">&times;</button>
+            <h2>Añadir Gasto</h2>
+            <form id="add-expense-form">
+                <section class="form-group">
+                    <label for="member">Miembro:</label>
+                    <input type="text" id="member" name="member" required>
+                </section>
+                <section class="form-group">
+                    <label for="amount">Monto:</label>
+                    <input type="number" id="amount" name="amount" step="0.01" min="0" required>
+                </section>
+                <section class="form-group">
+                    <label for="description">Descripción:</label>
+                    <input type="text" id="description" name="description">
+                </section>
+                <button type="submit">Añadir Gasto</button>
+            </form>
+        </article>
+    </dialog>
+
+    <!-- Transactions Modal -->
+    <dialog id="transactions-modal" class="modal">
+        <article class="modal-content">
+            <button class="close-btn" id="transactions-close" aria-label="Cerrar">&times;</button>
+            <h2>Transacciones</h2>
+            <p>Aquí se mostrarán las transacciones.</p>
+        </article>
+    </dialog>
+
+    <!-- Account Modal -->
+    <dialog id="account-modal" class="modal">
+        <article class="modal-content">
+            <button class="close-btn" id="account-close" aria-label="Cerrar">&times;</button>
+            <h2>Gestionar Cuenta</h2>
+            <form id="profile-form">
+                <section class="form-group">
+                    <label for="profile-username">Nombre de usuario:</label>
+                    <input type="text" id="profile-username" name="username" disabled>
+                </section>
+                <section class="form-group">
+                    <label for="profile-email">Correo electrónico:</label>
+                    <input type="email" id="profile-email" name="email" disabled>
+                </section>
+                <section class="form-group">
+                    <label for="profile-password">Contraseña:</label>
+                    <input type="password" id="profile-password" name="password">
+                </section>
+                <section class="form-group">
+                    <label for="confirm-password">Confirmar Contraseña:</label>
+                    <input type="password" id="confirm-password" name="confirm-password">
+                </section>
+                <button type="submit">Actualizar Contraseña</button>
+            </form>
+            <form id="delete-account-form">
+                <button type="submit" id="delete-account-btn">Eliminar Cuenta</button>
+            </form>
+        </article>
+    </dialog>
+
     <!-- Flash messages -->
-    {% with messages = get_flashed_messages(with_categories=true) %}
-        {% if messages %}
-            <div class="flashes">
-                {% for category, message in messages %}
-                    <div class="flash {{ category }}">{{ message }}</div>
-                {% endfor %}
-            </div>
-        {% endif %}
-    {% endwith %}
-    <script src="{{ url_for('static', filename='script.js') }}"></script>
+    <aside id="flash-messages" class="flashes">
+        <section class="flash success">
+            <p>Mensaje de éxito</p>
+            <button class="close-flash" aria-label="Cerrar">&times;</button>
+        </section>
+    </aside>
+    
+    
+
+    <script src="/static/script.js"></script>
 </body>
 </html>
